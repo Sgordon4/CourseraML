@@ -39,18 +39,47 @@ grad = zeros(size(theta));
 
 %     Computing Cost
 
-h = sigmoid(theta' .* X);
 
-% Sum hypothesis
-h = sum(h, 2)
+% Compute hypothesis
 
-J = (-y .* log(h)) - ((1 .- y) .* log(1 .- h))
+h = sigmoid(sum(theta' .* X, 2))
+
+
+J = (-y .* log(h)) - ((1 - y) .* log(1 - h));
+J = sum(J, 1) / m
+
+%      -- Computing Regularization --
+
+% Sum the squares of theta (except theta(1))
+sums = sum(theta(2:end, :) .^ 2, 1);
+
+reg = lambda * sums / (m);
+
+% Complete J
+J = J + reg;
+
+
+
+
 
 
 %   Computing Gradient
 
+diff = h - y
+scale = diff .* X
+grad = scale ./ m;
+grad = sum(grad, 1)'
 
+%      -- Computing Regularization --
 
+% Replace theta(1) with 0 so it is not penalized
+theta_reg = [0; theta(2:end, :)];
+
+% Compute regression matrix
+reg = (lambda / m) .* theta_reg;
+
+% Add regularization onto our cost gradient
+grad = grad .+ reg;
 
 
 
