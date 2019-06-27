@@ -38,6 +38,11 @@ grad = zeros(size(theta));
 
 
 
+%		Computing Cost
+
+h = sigmoid(theta'*X)
+
+J = (-y * log(h)) - ((1 .- y) * log(1 .- h))
 
 
 
