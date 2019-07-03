@@ -64,10 +64,86 @@ Theta2_grad = zeros(size(Theta2));
 
 
 
+% --------------   Part 1   -------------- %
+
+%Format y
+Y = [1:num_labels] == y;
+Y = Y';
+
+
+
+%Add a column of '1's to the left side of X for bias input
+a1 = [ones(rows(X), 1), X];
+
+%For every training example...
+for i = 1:rows(a1)
+
+	%Grab the example
+	ex = a1(i,:);
+	
+	%  Put it through the first hidden layer
+	z2 = Theta1 .* ex;
+	z2 = sum(z2, 2);
+	a2 = [1; sigmoid(z2)];
+	
+	%  Put it through the second hidden layer
+	z3 = Theta2 .* a2';
+	a3 = sigmoid( sum(z3, 2) );
+	
+	
+	%  Compute J
+	A = log(a3);
+	B = log(1 - a3);
+	
+	%Grab this examples respective Y
+	Yk = Y(1:num_labels, i);
+	
+	temp = (-Yk .* A) - ((1 - Yk) .* B);
+	J = J + sum(temp);
+	
+	
+endfor
+
+J = J / m;
 
 
 
 
+% --- Add Regularization --- %
+
+%nn_params contains all theta
+reg = sum(nn_params .^ 2);
+reg = (lambda / (2 * m)) * reg ;
+
+J = J + reg;
+
+
+
+
+
+
+% Add a column of '1's to the left side of X for bias input
+% a1 = [ones(rows(X), 1), X];
+
+%--------
+
+% z2 = Theta1 .* a1
+
+% a2 = sigmoid(z2);
+% a2 = [ones(rows(a2), 1), a2];
+
+%--------
+
+% z3 = Theta2 * a2;
+
+% a3 = sigmoid(z3)
+
+% ---------------------------------------- %
+
+% --------------   Part 2   -------------- %
+% ---------------------------------------- %
+% --------------   Part 3   -------------- %
+% ---------------------------------------- %
 
 
 
