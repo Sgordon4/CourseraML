@@ -70,6 +70,7 @@ Theta2_grad = zeros(size(Theta2));
 Y = [1:num_labels] == y;
 Y = Y';
 
+D2 = 0
 
 
 %Add a column of '1's to the left side of X for bias input
@@ -102,9 +103,31 @@ for i = 1:rows(a1)
 	J = J + sum(temp);
 	
 	
+	% --------------   Part 2   -------------- %'
+
+	%Calculate error in output layer
+	d3 = a3 .- Yk;
+	
+	%Calculate error in layer #2
+	d2 = (Theta2' * d3) .* (a2 .* (1 - a2));
+	
+	%Remove error from d2_0
+	d2 = d2(2:end);
+	
+	%Do something, honestly idk
+	D2 = D2 + (d2 .* a2(2:end)');
+	
+	
+	
+	% ---------------------------------------- %
+	
+	
+	
+	
 endfor
 
 J = J / m;
+Theta2_grad = D2/m;
 
 
 
@@ -120,28 +143,9 @@ J = J + reg;
 
 
 
-
-
-% Add a column of '1's to the left side of X for bias input
-% a1 = [ones(rows(X), 1), X];
-
-%--------
-
-% z2 = Theta1 .* a1
-
-% a2 = sigmoid(z2);
-% a2 = [ones(rows(a2), 1), a2];
-
-%--------
-
-% z3 = Theta2 * a2;
-
-% a3 = sigmoid(z3)
-
 % ---------------------------------------- %
 
-% --------------   Part 2   -------------- %
-% ---------------------------------------- %
+
 % --------------   Part 3   -------------- %
 % ---------------------------------------- %
 
