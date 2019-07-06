@@ -63,14 +63,18 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
-
 % --------------   Part 1   -------------- %
+
+
+
+
 
 %Format y
 Y = [1:num_labels] == y;
 Y = Y';
 
-D2 = 0
+D1 = 0;
+D2 = 0;
 
 
 %Add a column of '1's to the left side of X for bias input
@@ -103,20 +107,51 @@ for i = 1:rows(a1)
 	J = J + sum(temp);
 	
 	
-	% --------------   Part 2   -------------- %'
+	% --------------   Part 2   -------------- %
+	
+	%Trim the bias unit off of everything
+	Theta2x = Theta2(:, 2:end);
+	a2 = a2(2:end);
+	
+	Theta1x = Theta1(:, 2:end);
+	ex = ex(:, 2:end);
+	
+	
+	
 
 	%Calculate error in output layer
 	d3 = a3 .- Yk;
 	
+	
 	%Calculate error in layer #2
-	d2 = (Theta2' * d3) .* (a2 .* (1 - a2));
+	d2 = (Theta2x' * d3) .* (a2 .* (1 - a2));
 	
-	%Remove error from d2_0
-	d2 = d2(2:end);
 	
-	%Do something, honestly idk
-	D2 = D2 + (d2 .* a2(2:end)');
+	%Take dot product of layer2 error and layer2 output, but remove bias neuron
+	% D2 = D2 + (d2(2:end) .* a2(2:end));
+	D2 = D2 + (d2 * (a2)');
+	printf("D2\n")
+	size(d2)
+	size(D2)
 	
+	printf("D1\n")
+	size(ex)
+	size(Theta1x')
+	size(d2)
+	
+	size((Theta1x' * d2)')
+	size((ex .* (1 - ex))')
+	
+	%Calculate error in layer #1
+	 d1 = (Theta1x' * d2) * (ex .* (1 - ex));
+	%d1 = (ex .* (1 - ex)) * (Theta1x' * d2);
+	
+	size(d1)
+	f
+	
+	
+	%Take dot product of layer1 error and layer1 output, but remove bias neuron
+	D1 = D1 + (d1 .* ex);
 	
 	
 	% ---------------------------------------- %
@@ -126,8 +161,15 @@ for i = 1:rows(a1)
 	
 endfor
 
+size(D2)
+size(D1)
+
+
+
 J = J / m;
 Theta2_grad = D2/m;
+Theta1_grad = D1/m;
+
 
 
 
