@@ -120,38 +120,17 @@ for i = 1:rows(a1)
 	
 
 	%Calculate error in output layer
-	d3 = a3 .- Yk;
-	
+	d3 = a3 - Yk;
 	
 	%Calculate error in layer #2
-	d2 = (Theta2x' * d3) .* (a2 .* (1 - a2));
+	d2 = (Theta2x' * d3) .* a2 .* (1 - a2);
 	
 	
-	%Take dot product of layer2 error and layer2 output, but remove bias neuron
-	% D2 = D2 + (d2(2:end) .* a2(2:end));
-	D2 = D2 + (d2 * (a2)');
-	printf("D2\n")
-	size(d2)
-	size(D2)
+	%Take dot product of layer3 error and layer2 output, but remove bias neuron
+	D2 = D2 + (d3 * (a2)');
 	
-	printf("D1\n")
-	size(ex)
-	size(Theta1x')
-	size(d2)
-	
-	size((Theta1x' * d2)')
-	size((ex .* (1 - ex))')
-	
-	%Calculate error in layer #1
-	 d1 = (Theta1x' * d2) * (ex .* (1 - ex));
-	%d1 = (ex .* (1 - ex)) * (Theta1x' * d2);
-	
-	size(d1)
-	f
-	
-	
-	%Take dot product of layer1 error and layer1 output, but remove bias neuron
-	D1 = D1 + (d1 .* ex);
+	%Take dot product of layer2 error and layer1 output, but remove bias neuron
+	D1 = D1 + (d2 * ex);
 	
 	
 	% ---------------------------------------- %
@@ -161,8 +140,8 @@ for i = 1:rows(a1)
 	
 endfor
 
-size(D2)
-size(D1)
+% size(D2)
+% size(D1)
 
 
 
@@ -190,9 +169,6 @@ J = J + reg;
 
 % --------------   Part 3   -------------- %
 % ---------------------------------------- %
-
-
-
 
 
 
