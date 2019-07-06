@@ -63,10 +63,11 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+
+
+
+
 % --------------   Part 1   -------------- %
-
-
-
 
 
 %Format y
@@ -80,92 +81,85 @@ D2 = 0;
 %Add a column of '1's to the left side of X for bias input
 a1 = [ones(rows(X), 1), X];
 
-%For every training example...
-for i = 1:rows(a1)
 
-	%Grab the example
-	ex = a1(i,:);
-	
-	%  Put it through the first hidden layer
-	z2 = Theta1 .* ex;
-	z2 = sum(z2, 2);
-	a2 = [1; sigmoid(z2)];
-	
-	%  Put it through the second hidden layer
-	z3 = Theta2 .* a2';
-	a3 = sigmoid( sum(z3, 2) );
-	
-	
-	%  Compute J
-	A = log(a3);
-	B = log(1 - a3);
-	
-	%Grab this examples respective Y
-	Yk = Y(1:num_labels, i);
-	
-	temp = (-Yk .* A) - ((1 - Yk) .* B);
-	J = J + sum(temp);
-	
-	
-	% --------------   Part 2   -------------- %
-	
-	%Trim the bias unit off of everything
-	Theta2x = Theta2(:, 2:end);
-	a2 = a2(2:end);
-	
-	Theta1x = Theta1(:, 2:end);
-	ex = ex(:, 2:end);
-	
-	
-	
+%Multiply the data vector with the first set of thetas
+z2 = a1 * Theta1';
 
-	%Calculate error in output layer
-	d3 = a3 - Yk;
-	
-	%Calculate error in layer #2
-	d2 = (Theta2x' * d3) .* a2 .* (1 - a2);
-	
-	
-	%Take dot product of layer3 error and layer2 output, but remove bias neuron
-	D2 = D2 + (d3 * (a2)');
-	
-	%Take dot product of layer2 error and layer1 output, but remove bias neuron
-	D1 = D1 + (d2 * ex);
-	
-	
-	% ---------------------------------------- %
-	
-	
-	
-	
-endfor
+%Compute activation value of first set of neurons and add a column of bias units
+a2 = [ones(rows(X), 1), sigmoid(z2)];
 
-% size(D2)
-% size(D1)
+
+%Multiply the output of the first set of neurons by the second set of thetas
+z3 = a2 * Theta2';
+
+%Compute activation value of second set of neurons
+a3 = sigmoid(z3);
 
 
 
-J = J / m;
-Theta2_grad = D2/m;
-Theta1_grad = D1/m;
+%Prep to compute cost function
+A = log(a3);
+B = log(1 - a3);
+
+%Compute cost function
+temp = (-Y' .* A) - ((1 - Y') .* B);
+J = sum(sum(temp, 1), 2)/m;
 
 
 
 
+%-- Now for regularization --%
 
-% --- Add Regularization --- %
+%Trim the bias unit off of the Thetas
+Theta1x = Theta1(:, 2:end);
+Theta2x = Theta2(:, 2:end);
 
-%nn_params contains all theta
-reg = sum(nn_params .^ 2);
-reg = (lambda / (2 * m)) * reg ;
+%Compute the regularization
+reg1 = sum(sum(   Theta1x .^2   ,1),2);
+reg2 = sum(sum(   Theta2x .^2   ,1),2);
 
+reg = (lambda / (2 * m)) * (reg1 + reg2);
+
+%And add it to J
 J = J + reg;
 
 
+% size(a1)
+% size(z2)
+% size(a2)
+% size(a3)
+% size(Y)
+
+	
 
 
 % ---------------------------------------- %
 
+
+% --------------   Part 2   -------------- %
+
+
+%Calculate error in output layer
+d3 = a3 - Y';
+
+%Calculate error in layer #2
+d2 = (d3 * Theta2);
+d2 = d2 .* a2.*(1-a2);
+
+%Trim off the error from the bias unit
+d2 = d2(:,(2:end));
+
+
+%Now compute Theta_grads 
+D1 = d2' * a1;
+Theta1_grad = D1 / m;
+
+D2 = d3' * a2;
+Theta2_grad = D2 / m;
+
+
+
+% ---------------------------------------- %
 
 % --------------   Part 3   -------------- %
 % ---------------------------------------- %
