@@ -54,7 +54,30 @@ error_val   = zeros(m, 1);
 % ---------------------- Sample Solution ----------------------
 
 
+for i = i:m
 
+	%-- Compute Cost --%
+
+	%Calculate Hypothesis
+	h = X * theta;
+
+	%Calculate Differences
+	diff = (h .- y) .^ 2;
+
+	%Find average of differences
+	J = sum(diff, 1) / (2*m);
+
+
+	%-- Now Regularize --%
+
+	%Replace theta_0 with 0 so it is not regularized
+	thetax = [0;theta(2:end)];
+
+	reg = sum(thetax .^ 2, 1) * lambda / (2 * m);
+
+	J = J + reg;
+
+end
 
 
 

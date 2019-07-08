@@ -41,9 +41,34 @@ J = sum(diff, 1) / (2*m);
 
 
 %-- Now Regularize --%
-reg = sum(theta .^ 2, 1) * lambda / (2 * m);
+
+%Replace theta_0 with 0 so it is not regularized
+thetax = [0;theta(2:end)];
+
+reg = sum(thetax .^ 2, 1) * lambda / (2 * m);
 
 J = J + reg;
+
+
+%-- Compute Gradient --%
+
+%Find the difference between predicted and real
+diff = (h - y);
+
+%Multiply by each data point
+grad = diff .* X;
+
+%Sum vertically and average
+grad = sum(grad, 1) / m;
+
+
+%-- Now Regularize --%
+
+%Only regularize theta1 (thetax has theta0 set to 0)
+reg = (lambda * thetax) / m;
+
+grad = grad + reg';
+
 
 % =========================================================================
 
