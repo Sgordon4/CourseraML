@@ -25,6 +25,21 @@ p = zeros(size(X, 1), 1);
 
 
 
+a1 = [ones(m, 1), X];
+
+z2 = a1 * Theta1';
+a2 = sigmoid(z2);
+
+a2 = [ones(m, 1), a2];
+
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
+
+%Grab the maxes and their respective indecies from the matrix
+[M, I] = max(a3, [], 2);
+	
+%Send back all the indicies
+p = I;
 
 
 

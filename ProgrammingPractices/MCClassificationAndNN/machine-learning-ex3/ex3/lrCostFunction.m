@@ -37,28 +37,23 @@ grad = zeros(size(theta));
 %
 
 
-%     Computing Cost
 
-%		Computing Cost
+%-- Compute Cost --%
 
-h = sigmoid(theta'*X)
+%Compute hypothesis
+h = sigmoid(X * theta);
 
-J = (-y * log(h)) - ((1 .- y) * log(1 .- h))
-
-% Compute hypothesis
-
-h = sigmoid(sum(theta' .* X, 2))
-
-
+%Compute and average cost
 J = (-y .* log(h)) - ((1 - y) .* log(1 - h));
-J = sum(J, 1) / m
+J = sum(J, 1) / m;
+
 
 %      -- Computing Regularization --
 
 % Sum the squares of theta (except theta(1))
 sums = sum(theta(2:end, :) .^ 2, 1);
 
-reg = lambda * sums / (m);
+reg = lambda * sums / (2 * m);
 
 % Complete J
 J = J + reg;
@@ -70,10 +65,10 @@ J = J + reg;
 
 %   Computing Gradient
 
-diff = h - y
-scale = diff .* X
+diff = h - y;
+scale = diff .* X;
 grad = scale ./ m;
-grad = sum(grad, 1)'
+grad = sum(grad, 1)';
 
 %      -- Computing Regularization --
 

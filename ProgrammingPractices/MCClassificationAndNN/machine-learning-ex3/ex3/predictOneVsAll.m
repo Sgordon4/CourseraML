@@ -31,7 +31,15 @@ X = [ones(m, 1) X];
 %       
 
 
+	
+%Compute all predictions
+h = X * all_theta';
 
+%Grab the maxes and their respective indecies from the matrix
+[M, I] = max(h, [], 2);
+	
+%Send back all the indicies
+p = I;
 
 
 
