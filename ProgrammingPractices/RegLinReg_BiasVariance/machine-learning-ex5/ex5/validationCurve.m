@@ -40,6 +40,38 @@ error_val = zeros(length(lambda_vec), 1);
 %
 
 
+for i = 1:length(lambda_vec)
+	
+	%Grab the next lambda
+	lambda = lambda_vec(i);
+	
+	
+	%Compute thetas
+	theta = trainLinearReg(X, y, lambda);
+	
+	
+	%Compute training error
+	J = linearRegCostFunction(X, y, theta, 0);
+	
+	%Add it to the vector
+	error_train(i) = J;
+	
+	
+	%Compute cross validation error
+	J = linearRegCostFunction(Xval, yval, theta, 0);
+	
+	%Add it to the vector
+	error_val(i) = J;
+	
+	% [error_train_temp, error_val_temp] = learningCurve(X, y, Xval, yval, lambda)
+	% error_train_temp
+	% error_val_temp
+	
+	% error_train(i) = error_train_temp;
+	% error_val(i) = error_val_temp;
+	
+end
+
 
 
 

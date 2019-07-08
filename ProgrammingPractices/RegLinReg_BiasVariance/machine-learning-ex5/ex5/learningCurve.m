@@ -54,31 +54,28 @@ error_val   = zeros(m, 1);
 % ---------------------- Sample Solution ----------------------
 
 
-for i = i:m
-
-	%-- Compute Cost --%
-
-	%Calculate Hypothesis
-	h = X * theta;
-
-	%Calculate Differences
-	diff = (h .- y) .^ 2;
-
-	%Find average of differences
-	J = sum(diff, 1) / (2*m);
-
-
-	%-- Now Regularize --%
-
-	%Replace theta_0 with 0 so it is not regularized
-	thetax = [0;theta(2:end)];
-
-	reg = sum(thetax .^ 2, 1) * lambda / (2 * m);
-
-	J = J + reg;
-
+for i = 1:m
+	
+	X_train = X(1:i, :);
+	y_train = y(1:i);
+	
+	
+	theta = trainLinearReg(X_train, y_train, lambda);
+	
+	%Compute training error
+	J = linearRegCostFunction(X_train, y_train, theta, 0);
+	
+	%Add it to the vector
+	error_train(i) = J;
+	
+	
+	%Compute cross validation error
+	J = linearRegCostFunction(Xval, yval, theta, 0);
+	
+	%Add it to the vector
+	error_val(i) = J;
+	
 end
-
 
 
 
