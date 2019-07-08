@@ -19,16 +19,31 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+% size(X)
+% X
+% size(y)
+% y
+% size(theta)
+% theta
 
 
 
+%-- Compute Cost --%
+
+%Calculate Hypothesis
+h = X * theta;
+
+%Calculate Differences
+diff = (h .- y) .^ 2;
+
+%Find average of differences
+J = sum(diff, 1) / (2*m);
 
 
+%-- Now Regularize --%
+reg = sum(theta .^ 2, 1) * lambda / (2 * m);
 
-
-
-
-
+J = J + reg;
 
 % =========================================================================
 
