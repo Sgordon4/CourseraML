@@ -17,9 +17,15 @@ sim = 0;
 %
 
 
+%Find the difference between the examples, squared
+diff = (x1 .- x2) .^2;
+
+%Sum but dont take average
+diff = sum(diff, 1);
 
 
-
+%compute the similarity
+sim = exp(- diff /  (2 * (sigma .^2)) );
 
 % =============================================================
     
