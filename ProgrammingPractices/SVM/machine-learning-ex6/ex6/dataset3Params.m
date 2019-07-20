@@ -35,13 +35,15 @@ errors = zeros(rows, rows);
 for c = 1:rows 
 	for sig = 1: rows	
 		
-		%Compute and print combination number
-		combo = (c - 1) * rows + sig;
-		fprintf(['Training combination number %d:'], combo);
-		
 		%Assign the values of C and sigma to test
 		C = options(c);
 		sigma = options(sig);
+		
+		
+		%Compute and print relevant information
+		combo = (c - 1) * rows + sig;
+		fprintf(['Training combination number %d:\n'], combo);
+		fprintf(['C: %.2f 	Sigma: %.2f'], C, sigma);
 		
 		
 		%Train the model with the respective C and sigma

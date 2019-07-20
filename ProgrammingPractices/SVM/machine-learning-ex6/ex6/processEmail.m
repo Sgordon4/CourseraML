@@ -98,7 +98,16 @@ while ~isempty(email_contents)
     %
 
 
-
+	%For every word in the vocabulary
+	for i = 1:length(vocabList)
+		
+		%If it matches our current one
+		if(strcmp(str, vocabList{i}))
+			word_indices = [word_indices ; i];
+			break;
+		endif
+		
+	end
 
 
 
