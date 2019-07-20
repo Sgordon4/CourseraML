@@ -24,9 +24,49 @@ sigma = 0.3;
 %
 
 
+%Options to choose C and sigma from
+options = [0.01; 0.03; 0.1; 0.3; 1; 3; 10; 30];
+rows = rows(options);
+
+%Create a matrix to hold the error for each model
+errors = zeros(rows, rows);
+
+%For every option
+for c = 1:rows 
+	for sig = 1: rows	
+		
+		%Compute and print combination number
+		combo = (c - 1) * rows + sig;
+		fprintf(['Training combination number %d:'], combo);
+		
+		%Assign the values of C and sigma to test
+		C = options(c);
+		sigma = options(sig);
+		
+		
+		%Train the model with the respective C and sigma
+		model = svmTrain(X, y, C, @(x1, x2) gaussianKernel(x1, x2, sigma)); 
+		
+		%Grab the predictions from the trained model
+		predictions = svmPredict(model, Xval);
+		
+		%Find the cost
+		error = mean(double(predictions ~= yval));
+		
+		%Store the error in its respective position
+		errors(c, sig) = error;
+		
+	end
+end
 
 
+%Find the position of the lowest error
+minVal = min(min(errors));
+[i, j] = find(errors == minVal);
 
+%Assign the respective values to C and sigma
+C = options(i);
+sigma = options(j);
 
 
 % =========================================================================
