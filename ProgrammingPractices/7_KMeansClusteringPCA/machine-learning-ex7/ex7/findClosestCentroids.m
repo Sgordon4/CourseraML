@@ -22,6 +22,24 @@ idx = zeros(size(X,1), 1);
 %
 
 
+for i = 1:rows(X)
+	
+	%Grab the example
+	x = X(i, :);
+	
+	%Compute distance from centroids
+	temp = (x .- centroids);
+	temp = temp .^ 2;
+	temp = sum(temp, 2);
+	%temp = temp .^ (1/2);		%Unneeded
+	
+	%Find smallest distance
+	[minval, row] = min(min(temp,[],2));
+	
+	%Assign respective centroid to example
+	idx(i) = row;
+	
+end
 
 
 

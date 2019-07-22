@@ -27,7 +27,35 @@ centroids = zeros(K, n);
 %
 
 
-
+%For every centroid
+for c = 1:K
+	
+	counter = 0;
+	sum = 0;
+	
+	%For each example
+	for i = 1:m
+	
+		%If this example is assigned to this centroid
+		if(idx(i) == c)
+			
+			%Add one to the counter
+			counter = counter + 1;
+		
+			%Add it to the sum
+			sum = sum + X(i, :);
+			
+		end
+		
+	end
+	
+	%Compute new centroid location
+	location = sum / counter;
+	
+	%And throw it on the pile
+	centroids(c, :) = location;
+	
+end
 
 
 
