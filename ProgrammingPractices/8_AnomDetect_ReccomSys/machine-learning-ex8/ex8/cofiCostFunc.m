@@ -41,9 +41,18 @@ Theta_grad = zeros(size(Theta));
 %
 
 
+% size(X)
+% size(Y)
+% size(Theta)
 
 
 
+%-------- Compute Cost Function --------%
+
+h = (X * Theta' - Y) .^ 2;
+J = sum(h, 1)
+
+d
 
 
 
