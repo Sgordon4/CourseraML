@@ -50,14 +50,33 @@ Theta_grad = zeros(size(Theta));
 %-------- Compute Cost Function --------%
 
 h = (X * Theta' - Y) .^ 2;
-J = sum(h, 1)
 
-d
-
-
+%Keep only where people actually rated
+h = h .* R;
 
 
+J = sum(sum(h)) / 2;
 
+% X
+% Theta
+% R
+% h
+
+
+
+%Now gradients
+
+idx = find(R == 1)
+
+Theta_t = Theta(idx,:)
+Y_t = Y(:, idx)
+
+l
+X_grad = h * Theta;
+%X_grad = sum(X_grad, 1);
+
+Theta_grad = X' * h;
+%Theta_grad = sum(Theta_grad, 1);
 
 
 
