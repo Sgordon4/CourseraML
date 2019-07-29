@@ -41,45 +41,41 @@ Theta_grad = zeros(size(Theta));
 %
 
 
-% size(X)
-% size(Y)
-% size(Theta)
-
-
-
 %-------- Compute Cost Function --------%
 
-h = (X * Theta' - Y) .^ 2;
+%Predicted ratings for each movie for every user
+predRatings = X * Theta';
 
-%Keep only where people actually rated
-h = h .* R;
+%Compute error between predicted and actual
+error = predRatings - Y;
 
-
-J = sum(sum(h)) / 2;
-
-% X
-% Theta
-% R
-% h
+%Compute error factor, == 0 when user has not rated
+error_factor = error .* R;
 
 
-
-%Now gradients
-
-idx = find(R == 1)
-
-Theta_t = Theta(idx,:)
-Y_t = Y(:, idx)
-
-l
-X_grad = h * Theta;
-%X_grad = sum(X_grad, 1);
-
-Theta_grad = X' * h;
-%Theta_grad = sum(Theta_grad, 1);
+%Calculate unregularized cost
+J = sum(sum(error_factor .^ 2)) / 2;
 
 
 
+%----------- Compute Gradient ----------%
+
+X_grad = error_factor * Theta;
+
+Theta_grad = error_factor' * X;
+
+
+
+%-------------- Regularize -------------%
+
+reg1 = sum(sum(Theta .^ 2)) * lambda / 2;
+reg2 = sum(sum(  X .^ 2  )) * lambda / 2;
+
+J = J + reg1 + reg2;
+
+
+X_grad     = X_grad     + lambda * X;
+Theta_grad = Theta_grad + lambda * Theta;
 
 
 
